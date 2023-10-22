@@ -1,0 +1,16 @@
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./server/database.db');
+
+// Create a table to store seat information if it doesn't exist
+db.serialize(() => {
+  db.run('CREATE TABLE IF NOT EXISTS seats (id INTEGER PRIMARY KEY AUTOINCREMENT, number INTEGER, status TEXT, type TEXT)');
+
+  // Insert some sample data (you can customize this according to your requirements)
+  const insert = db.prepare('INSERT INTO seats (number, status, type) VALUES (?, ?, ?)');
+  insert.run(1, 'available', 'Standard');
+  insert.run(2, 'available', 'Standard');
+  insert.run(3, 'booked', 'Premium');
+  insert.finalize();
+});
+
+module.exports = db;
